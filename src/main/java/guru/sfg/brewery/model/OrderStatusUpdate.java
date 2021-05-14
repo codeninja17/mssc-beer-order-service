@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package guru.sfg.beer.order.service.web.model;
+package guru.sfg.brewery.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -28,20 +28,18 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BeerOrderLineDto extends BaseItem {
+public class OrderStatusUpdate extends BaseItem {
 
     @Builder
-    public BeerOrderLineDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate,
-                            String upc, String beerName, UUID beerId, Integer orderQuantity) {
+    public OrderStatusUpdate(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate,
+                             UUID orderId, String orderStatus, String customerRef) {
         super(id, version, createdDate, lastModifiedDate);
-        this.upc = upc;
-        this.beerName = beerName;
-        this.beerId = beerId;
-        this.orderQuantity = orderQuantity;
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.customerRef = customerRef;
     }
 
-    private String upc;
-    private String beerName;
-    private UUID beerId;
-    private Integer orderQuantity = 0;
+    private UUID orderId;
+    private String customerRef;
+    private String orderStatus;
 }

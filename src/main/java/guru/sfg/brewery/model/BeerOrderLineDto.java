@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package guru.sfg.beer.order.service.web.model;
+package guru.sfg.brewery.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -23,28 +23,25 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BeerOrderDto extends BaseItem {
+public class BeerOrderLineDto extends BaseItem {
 
     @Builder
-    public BeerOrderDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate, UUID customerId, List<BeerOrderLineDto> beerOrderLines,
-                        String orderStatus, String orderStatusCallbackUrl, String customerRef) {
+    public BeerOrderLineDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate,
+                            String upc, String beerName, UUID beerId, Integer orderQuantity) {
         super(id, version, createdDate, lastModifiedDate);
-        this.customerId = customerId;
-        this.beerOrderLines = beerOrderLines;
-        this.orderStatus = orderStatus;
-        this.orderStatusCallbackUrl = orderStatusCallbackUrl;
-        this.customerRef = customerRef;
+        this.upc = upc;
+        this.beerName = beerName;
+        this.beerId = beerId;
+        this.orderQuantity = orderQuantity;
     }
 
-    private UUID customerId;
-    private String customerRef;
-    private List<BeerOrderLineDto> beerOrderLines;
-    private String orderStatus;
-    private String orderStatusCallbackUrl;
+    private String upc;
+    private String beerName;
+    private UUID beerId;
+    private Integer orderQuantity = 0;
 }
