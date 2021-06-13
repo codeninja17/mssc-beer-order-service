@@ -76,6 +76,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     }
 
     @Override
+    @Transactional
     public void beerOrderAllocationPendingInventory(BeerOrderDto beerOrderDto) {
         BeerOrder beerOrder = beerOrderRepository.findById(beerOrderDto.getId()).get();
         sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.ALLOCATION_NO_INVENTORY);
@@ -97,6 +98,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     }
 
     @Override
+    @Transactional
     public void beerOrderAllocationFailed(BeerOrderDto beerOrderDto) {
         BeerOrder beerOrder = beerOrderRepository.getOne(beerOrderDto.getId());
         sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.ALLOCATION_FAILED);
@@ -119,9 +121,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
                     beerOrder.getOrderStatus(),null,null,null
             ));
         });
-
         sm.start();
-
         return sm;
     }
 }

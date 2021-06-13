@@ -17,6 +17,7 @@ public class JmsConfig {
     public static final String VALIDATE_ORDER_RESULT = "validate-order-result";
     public static final String ALLOCATE_ORDER = "allocate-order";
     public static final String ALLOCATE_ORDER_RESPONSE_QUEUE = "allocate-order-response";
+    public static final String ALLOCATE_EXCEPTION_QUEUE = "allocate-exception-queue";
 
 
     @Bean

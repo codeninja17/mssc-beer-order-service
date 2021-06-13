@@ -19,6 +19,8 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
 
     private final Action<BeerOrderStatusEnum,BeerOrderEventEnum> validateBeerOrderAction;
     private final Action<BeerOrderStatusEnum,BeerOrderEventEnum> allocateOrderAction;
+    private final Action<BeerOrderStatusEnum,BeerOrderEventEnum> validationExceptionAction;
+    private final Action<BeerOrderStatusEnum,BeerOrderEventEnum> allocationExceptionAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states) throws Exception {
@@ -41,7 +43,7 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                     .event(BeerOrderEventEnum.VALIDATION_PASSED)
                     .and()
                     .withExternal().source(BeerOrderStatusEnum.VALIDATION_PENDING).target(BeerOrderStatusEnum.VALIDATION_EXCEPTION)
-                    .event(BeerOrderEventEnum.VALIDATION_FAILED)
+                    .event(BeerOrderEventEnum.VALIDATION_FAILED).action(validationExceptionAction)
                     .and()
                     .withExternal().source(BeerOrderStatusEnum.VALIDATED).target(BeerOrderStatusEnum.ALLOCATION_PENDING)
                     .event(BeerOrderEventEnum.ALLOCATE_ORDER).action(allocateOrderAction)
@@ -50,10 +52,10 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                     .event(BeerOrderEventEnum.ALLOCATION_SUCCESS)
                     .and()
                     .withExternal().source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.ALLOCATION_EXCEPTION)
-                    .event(BeerOrderEventEnum.ALLOCATION_FAILED)
+                    .event(BeerOrderEventEnum.ALLOCATION_FAILED).action(allocationExceptionAction)
                     .and().withExternal()
                     .source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.PENDING_INVENTORY)
-                    .event(BeerOrderEventEnum.ALLOCATION_NO_INVENTORY)
+                    .event(BeerOrderEventEnum.ALLOCATION_NO_INVENTORY).action(allocationExceptionAction)
                     .and().withExternal()
                     .source(BeerOrderStatusEnum.ALLOCATED).target(BeerOrderStatusEnum.PICKED_UP)
                     .event(BeerOrderEventEnum.BEER_ORDER_PICKED_UP);

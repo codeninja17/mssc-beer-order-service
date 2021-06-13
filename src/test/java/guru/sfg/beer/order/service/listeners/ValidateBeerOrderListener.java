@@ -11,6 +11,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -21,8 +23,14 @@ public class ValidateBeerOrderListener {
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER)
     public void listen(Message msg){
         ValidateBeerOrderRequest validateBeerOrderRequest = (ValidateBeerOrderRequest) msg.getPayload();
+        boolean isValid = true;
 
-        jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_RESULT, ValidateOrderResult.builder().isValid(true).
+        if(validateBeerOrderRequest.getBeerOrderDto().getCustomerRef()!=null
+                && validateBeerOrderRequest.getBeerOrderDto().getCustomerRef().equals("FAILED_VAL_REF")) {
+                isValid = false;
+            }
+
+        jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_RESULT, ValidateOrderResult.builder().isValid(isValid).
                 beerOrderId(validateBeerOrderRequest.getBeerOrderDto().getId()).build());
 
         log.info("Validated beer order for integration testing");
