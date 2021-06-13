@@ -55,24 +55,34 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         return beerOrder;
     }
 
+    @Transactional
     @Override
     public void beerOrderAllocationPassed(BeerOrderDto beerOrderDto) {
         Optional<BeerOrder> beerOrder = beerOrderRepository.findById(beerOrderDto.getId());
         beerOrder.ifPresentOrElse(beerOrder1 -> {
             sendBeerOrderEvent(beerOrder1, BeerOrderEventEnum.ALLOCATION_SUCCESS);
-            updateAllocatedQty(beerOrderDto, beerOrder1);
+            updateAllocatedQty(beerOrderDto);
         },()->log.info("Beer Object Not Found"));
 
+    }
+
+    @Transactional
+    @Override
+    public void beerOrderPickedUp(UUID beerOrderId) {
+        Optional<BeerOrder> beerOrder = beerOrderRepository.findById(beerOrderId);
+        beerOrder.ifPresentOrElse(beerOrder1 -> {
+            sendBeerOrderEvent(beerOrder1, BeerOrderEventEnum.BEER_ORDER_PICKED_UP);
+        },()->log.info("Beer Object Not Found"));
     }
 
     @Override
     public void beerOrderAllocationPendingInventory(BeerOrderDto beerOrderDto) {
         BeerOrder beerOrder = beerOrderRepository.findById(beerOrderDto.getId()).get();
         sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.ALLOCATION_NO_INVENTORY);
-        updateAllocatedQty(beerOrderDto, beerOrder);
+        updateAllocatedQty(beerOrderDto);
     }
 
-    private void updateAllocatedQty(BeerOrderDto beerOrderDto, BeerOrder beerOrder) {
+    private void updateAllocatedQty(BeerOrderDto beerOrderDto) {
         BeerOrder allocatedOrder = beerOrderRepository.findById(beerOrderDto.getId()).get();
 
         allocatedOrder.getBeerOrderLines().forEach(beerOrderLine -> {
@@ -83,7 +93,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
             });
         });
 
-        beerOrderRepository.saveAndFlush(beerOrder);
+        beerOrderRepository.saveAndFlush(allocatedOrder);
     }
 
     @Override

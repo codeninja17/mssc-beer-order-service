@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AllocateBeerOrderRequest {
+public class AllocateBeerOrderRequest implements Serializable {
 
-    private static final long serialVersionUID = -1869866915783788364L;
+    private static final long serialVersionUID = -2024598498688710739L;
     private BeerOrderDto beerOrderDto;
 
 }
