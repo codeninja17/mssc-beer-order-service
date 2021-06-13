@@ -15,6 +15,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class ValidateBeerOrderAction implements Action<BeerOrderStatusEnum, Beer
     private final BeerOrderMapper beerOrderMapper;
 
     @Override
+    @Transactional
     public void execute(StateContext<BeerOrderStatusEnum, BeerOrderEventEnum> stateContext) {
         String beerOrderId = String.valueOf(stateContext.getMessage().getHeaders().get(BeerOrderManagerImpl.ORDER_ID_HEADER));
         BeerOrder beerOrder = beerOrderRepository.getOne(UUID.fromString(beerOrderId));

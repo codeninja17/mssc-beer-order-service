@@ -18,6 +18,7 @@ public class ValidateOrderResultListener {
 
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER_RESULT)
     public void handleValidateOrderResult(@Payload ValidateOrderResult validateOrderResult){
+        log.info("Received Validation order result for beer id",validateOrderResult.getBeerOrderId());
         beerOrderManager.validateBeerOrder(validateOrderResult.getBeerOrderId(),validateOrderResult.getIsValid());
     }
 
