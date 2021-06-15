@@ -18,6 +18,7 @@ public class JmsConfig {
     public static final String ALLOCATE_ORDER = "allocate-order";
     public static final String ALLOCATE_ORDER_RESPONSE_QUEUE = "allocate-order-response";
     public static final String ALLOCATE_EXCEPTION_QUEUE = "allocate-exception-queue";
+    public static final String DEALLOCATE_ORDER_QUEUE = "deallocate-order" ;
 
 
     @Bean
