@@ -37,7 +37,7 @@ public class TastingRoomService {
     }
 
     @Transactional
-    // @Scheduled(fixedRate = 50000) //run every 2 seconds
+    @Scheduled(fixedRate = 500000) //run every 2 seconds
     public void placeTastingRoomOrder(){
 
         List<Customer> customerList = customerRepository.findAllByCustomerNameLike(BeerOrderBootStrap.TASTING_ROOM);
